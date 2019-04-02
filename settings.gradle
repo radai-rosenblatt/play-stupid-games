@@ -1,0 +1,3 @@
+rootProject.name = 'play-stupid-games'
+
+include "stupid-14-games", "stupid-18-games"

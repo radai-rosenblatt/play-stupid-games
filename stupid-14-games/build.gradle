@@ -1,0 +1,67 @@
+import org.apache.avro.specific.SpecificCompiler
+import org.apache.commons.io.FileUtils
+
+//i wish this worked
+//buildscript {
+//  repositories {
+//    mavenCentral()
+//  }
+//  dependencies {
+//    classpath "org.apache.avro:avro:1.4.1"
+//    classpath "commons-io:commons-io:2.6"
+//  }
+//}
+
+plugins {
+  id "java"
+}
+
+repositories {
+  mavenCentral()
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs "${project.buildDir}/generated/sources/avro"
+    }
+  }
+}
+
+dependencies {
+  compile "org.apache.avro:avro:1.4.1"
+  testImplementation "junit:junit:4.12"
+}
+
+test {
+  useJUnit()
+
+  testLogging {
+    events "started", "passed", "skipped", "failed"
+  }
+}
+
+def avroCodeGen () {
+  File dest = new File("${project.buildDir}/generated/sources/avro")
+
+  //make sure dest exists
+  if (!dest.exists() && !dest.mkdirs()) {
+    throw new IllegalStateException("unable to create " + dest);
+  }
+  //clean out dest
+  FileUtils.cleanDirectory(dest)
+
+  //compile all schemas
+  File avroSourceRoot = new File("${rootProject.rootDir}/src/main/avro")
+  for (File schemaFile : avroSourceRoot.listFiles()) {
+    SpecificCompiler.compileSchema(schemaFile, dest)
+  }
+}
+
+task generateSpecificRecords() {
+  doLast {
+    avroCodeGen()
+  }
+}
+
+compileJava.dependsOn generateSpecificRecords

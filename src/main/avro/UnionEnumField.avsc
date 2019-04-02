@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "namespace": "net.radai.union",
+  "name": "UnionEnumField",
+  "fields": [
+    {
+      "name": "f",
+      "type": [
+        "null",
+        {
+          "type": "enum",
+          "name": "Enum",
+          "symbols": ["A", "B"]
+        }
+      ]
+    }
+  ]
+}

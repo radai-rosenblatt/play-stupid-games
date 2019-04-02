@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "namespace": "net.radai.simple",
+  "name": "SimpleEnumField",
+  "fields": [
+    {
+      "name": "f",
+      "type": {
+        "type": "enum",
+        "name": "Enum",
+        "symbols": ["A", "B"]
+      }
+    }
+  ]
+}
